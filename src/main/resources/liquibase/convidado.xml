@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="convidado.1" author="marciel.paula">
+    <createTable tableName="convidado">
+      <column name="id" autoIncrement="true" type="integer">
+        <constraints primaryKey="true" />
+      </column>
+      <column name="nome" type="varchar2(45)">
+        <constraints nullable="false" />
+      </column>
+      <column name="email" type="varchar2(45)">
+        <constraints nullable="false" />
+      </column>
+      <column name="telefone" type="varchar2(45)">
+        <constraints nullable="false" />
+      </column>
+    </createTable>
+
+    <createSequence sequenceName="defseq_convidado" incrementBy="1" maxValue="999999999"
+      startValue="1" />
+
+    <createProcedure>
+      <![CDATA[
+      CREATE OR REPLACE TRIGGER trg_convidado 
+          BEFORE INSERT ON convidado 
+          FOR EACH ROW
+          
+          BEGIN
+            SELECT defseq_convidado.NEXTVAL
+            INTO   :new.id
+            FROM   dual;
+          END;
+      ]]>
+    </createProcedure>
+  </changeSet>
+</databaseChangeLog>
